@@ -6,5 +6,5 @@ package com.example.shared2;
  * service-product for it .
  */
 public class SharedLib2 {
-    // TODO: Add shared functionalityyy
+    // TODO: Add shared functionalityyysfez
 }
