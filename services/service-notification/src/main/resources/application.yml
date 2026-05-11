@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: service-notification
+    name: service-notification-svc
   datasource:
     url: jdbc:h2:mem:notificationdb;DB_CLOSE_DELAY=-1
     driver-class-name: org.h2.Driver
