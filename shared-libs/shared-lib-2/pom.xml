@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>shared-lib-2</artifactId>
-    <!-- add a comment here   -->
+    <!-- add a comment here !!!  -->
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
