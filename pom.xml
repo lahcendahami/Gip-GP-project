@@ -165,9 +165,10 @@
                     <buildDownstream>always</buildDownstream>
                     <buildUpstream>always</buildUpstream>
                     <skipTestsForUpstreamModules>true</skipTestsForUpstreamModules>
-                    <buildAllIfNoChanges>true</buildAllIfNoChanges>
-                    <excludeDownstreamModulesPackagedAs>pom</excludeDownstreamModulesPackagedAs>
-                    <failOnError>false</failOnError>
+                    <buildAllIfNoChanges>false</buildAllIfNoChanges>
+                    <excludePathsMatching>.*\.md|Jenkinsfile|\.gitignore</excludePathsMatching>
+                    <buildUpstreamMode>impacted</buildUpstreamMode>
+                    <failOnError>true</failOnError>
                 </configuration>
             </plugin>
         </plugins>
