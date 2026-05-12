@@ -8,7 +8,7 @@
         <artifactId>services</artifactId>
         <version>1.0.0</version>
     </parent>
-
+<!-- add a comment here  -->
     <artifactId>service-notification</artifactId>
 
     <dependencies>
