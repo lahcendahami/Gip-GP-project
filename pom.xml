@@ -17,8 +17,9 @@
         <java.version>17</java.version>
         <spring-boot.version>3.3.0</spring-boot.version>
         <jacoco.version>0.8.12</jacoco.version>
-        <gib.referenceBranch>HEAD~1</gib.referenceBranch>
-        <gib.disable>false</gib.disable>
+        <jib.version>3.4.4</jib.version>
+        <jib.skip>true</jib.skip>
+        <docker.registry>localhost:8082</docker.registry>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
@@ -143,6 +144,22 @@
                         </execution>
                     </executions>
                 </plugin>
+                <plugin>
+                    <groupId>com.google.cloud.tools</groupId>
+                    <artifactId>jib-maven-plugin</artifactId>
+                    <version>${jib.version}</version>
+                    <configuration>
+                        <from>
+                            <image>eclipse-temurin:17-jre</image>
+                        </from>
+                        <to>
+                            <image>${docker.registry}/${project.artifactId}:${project.version}</image>
+                        </to>
+                        <allowInsecureRegistries>true</allowInsecureRegistries>
+
+                        <skip>${jib.skip}</skip>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -154,23 +171,7 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
             </plugin>
-            <plugin>
-                <groupId>io.github.gitflow-incremental-builder</groupId>
-                <artifactId>gitflow-incremental-builder</artifactId>
-                <version>4.6.0</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <disable>${gib.disable}</disable>
-                    <referenceBranch>${gib.referenceBranch}</referenceBranch>
-                    <buildDownstream>always</buildDownstream>
-                    <buildUpstream>always</buildUpstream>
-                    <skipTestsForUpstreamModules>true</skipTestsForUpstreamModules>
-                    <buildAllIfNoChanges>false</buildAllIfNoChanges>
-                    <excludePathsMatching>.*\.md|Jenkinsfile|\.gitignore</excludePathsMatching>
-                    <buildUpstreamMode>impacted</buildUpstreamMode>
-                    <failOnError>true</failOnError>
-                </configuration>
-            </plugin>
+
         </plugins>
     </build>
 </project>

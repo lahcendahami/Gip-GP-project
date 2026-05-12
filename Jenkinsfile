@@ -39,5 +39,10 @@ pipeline {
                 bat "mvn deploy -Dmaven.test.skip=true ${env.GIB_ARGS}"
             }
         }
+        stage('Build & Push Docker Images') {
+            steps {
+                bat "mvn jib:build -Dmaven.test.skip=true ${env.GIB_ARGS}"
+            }
+        }
     }
 }

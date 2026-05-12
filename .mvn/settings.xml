@@ -42,6 +42,11 @@
     </profiles> -->
     <servers>
         <server>
+            <id>localhost:8082</id>
+            <username>admin</username>
+            <password>nexus-33</password>
+        </server>
+        <server>
             <id>nexus</id>
             <username>admin</username>
             <password>nexus-33</password>

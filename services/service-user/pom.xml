@@ -5,16 +5,13 @@
 
     <parent>
         <groupId>com.example-12</groupId>
-        <artifactId>monorepo</artifactId>
+        <artifactId>services</artifactId>
         <version>1.0.0</version>
-        <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <artifactId>service-user</artifactId>
 
-    <properties>
-        <jib.skip>false</jib.skip>
-    </properties>
+
 
     <dependencies>
         <dependency>
@@ -40,17 +37,6 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>com.google.cloud.tools</groupId>
-                <artifactId>jib-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
+
 
 </project>

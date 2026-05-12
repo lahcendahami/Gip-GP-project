@@ -5,9 +5,8 @@
 
     <parent>
         <groupId>com.example-12</groupId>
-        <artifactId>monorepo</artifactId>
+        <artifactId>shared-libs</artifactId>
         <version>1.0.0</version>
-        <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <artifactId>shared-lib-2</artifactId>
