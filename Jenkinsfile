@@ -18,8 +18,10 @@ pipeline {
                         env.GIB_ARGS = "-Dgib.referenceBranch=refs/remotes/origin/${env.CHANGE_TARGET} -Dgib.fetchReferenceBranch=true"
                         echo "PR detected: comparing against origin/${env.CHANGE_TARGET}"
                     } else {
-                        env.GIB_ARGS = "-Dgib.referenceBranch=HEAD~1"
-                        echo "Push detected on ${env.BRANCH_NAME}: comparing against HEAD~1"
+                        echo "detect the last successful commit "
+                        env.lastSuccessfulCommit = env.GIT_PREVIOUS_SUCCESSFUL_COMMIT
+                        env.GIB_ARGS = "-Dgib.referenceBranch=${lastSuccessfulCommit}"
+                        echo "Push detected on ${env.BRANCH_NAME}: comparing against ${lastSuccessfulCommit}"
                     }
                 }
             }
