@@ -11,40 +11,90 @@ pipeline {
         jdk 'jdk-17'
     }
     stages {
-        stage('Determine Reference Branch') {
+        stage('Set Version & GIB Reference') {
             steps {
                 script {
-                    if (env.CHANGE_ID) {
-                        env.GIB_ARGS = "-Dgib.referenceBranch=refs/remotes/origin/${env.CHANGE_TARGET} -Dgib.fetchReferenceBranch=true"
-                        echo "PR detected: comparing against origin/${env.CHANGE_TARGET}"
-                    } else {
-                        echo "detect the last successful commit "
-                        env.lastSuccessfulCommit = env.GIT_PREVIOUS_SUCCESSFUL_COMMIT
-                        env.GIB_ARGS = "-Dgib.referenceBranch=${lastSuccessfulCommit}"
-                        echo "Push detected on ${env.BRANCH_NAME}: comparing against ${lastSuccessfulCommit}"
+                    def baseVersion = readMavenPom().getVersion().replaceAll('-SNAPSHOT$', '')
+                    def gitHash = bat(script: '@git rev-parse --short=4 HEAD', returnStdout: true).trim()
+
+                    switch (env.BRANCH_NAME) {
+                        case 'main':
+                        case 'master':
+                            env.VERSION = "${baseVersion}-${gitHash}"
+                            break
+                        case ~/^release\/.*/:
+                            env.VERSION = "${baseVersion}-${gitHash}-RELEASE"
+                            break
+                        case ~/^hotfix\/.*/:
+                            env.VERSION = "${baseVersion}-${gitHash}-HOTFIX"
+                            break
+                        default:
+                            def safeBranch = env.BRANCH_NAME.replaceAll('/', '-')
+                            env.VERSION = "${baseVersion}-${gitHash}-${safeBranch}-SNAPSHOT"
+                            break
                     }
+                    echo "Docker image tag: ${env.VERSION}"
+
+                    if (env.CHANGE_ID) {
+                        env.GIB_ARGS = "-Dgib.referenceBranch=refs/remotes/origin/${env.CHANGE_TARGET}"
+
+                    } else {
+                        def lastSuccessful = env.GIT_PREVIOUS_SUCCESSFUL_COMMIT
+                        if (lastSuccessful){
+                            env.GIB_ARGS = "-Dgib.referenceBranch=${lastSuccessful}"
+                        } else {
+                            env.GIB_ARGS = "-Dgib.disable=true"
+                        }
+                    }
+                    echo "GIB_ARGS: ${env.GIB_ARGS}"
+
                 }
             }
         }
+
         stage('Build') {
             steps {
-                bat "mvn clean install -DskipTests ${env.GIB_ARGS}"
+                bat "mvn clean install -DskipTests ${env.GIB_ARGS} -s ./.mvn/settings.xml"
             }
         }
-        stage('Test') {
+
+        stage('Tests & Coverage') {
             steps {
-                bat "mvn test ${env.GIB_ARGS}"
+                bat "mvn test ${env.GIB_ARGS} -s ./.mvn/settings.xml"
             }
         }
         stage('Publish Artifacts - Nexus') {
+            when {
+                anyOf {
+                    branch 'develop'
+                    branch 'main'
+                    branch 'master'
+                }
+            }
             steps {
-                bat "mvn deploy -Dmaven.test.skip=true ${env.GIB_ARGS}"
+                bat "mvn deploy -Dmaven.test.skip=true ${env.GIB_ARGS} -s ./.mvn/settings.xml"
             }
         }
+
         stage('Build & Push Docker Images') {
-            steps {
-                bat "mvn jib:build -Dmaven.test.skip=true ${env.GIB_ARGS}"
+            when {
+                anyOf {
+                    branch 'develop'
+                    branch 'main'
+                    branch 'master'
+                    branch pattern: "release/*", comparator: "GLOB"
+                    branch pattern: "hotfix/*", comparator: "GLOB"
+                }
             }
+            steps {
+                bat "mvn jib:build -Dmaven.test.skip=true -Djib.to.tags=${env.VERSION} ${env.GIB_ARGS} -s ./.mvn/settings.xml"
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
         }
     }
 }
