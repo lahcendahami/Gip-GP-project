@@ -1,6 +1,5 @@
 # Gradle
-.gradle/
-build/
+
 **/build/
 out/
 target/
