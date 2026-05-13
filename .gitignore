@@ -1,7 +1,6 @@
 # Gradle
 
 **/build/
-out/
 target/
 
 # IDE
