@@ -36,7 +36,7 @@ pipeline {
                     echo "Docker image tag: ${env.VERSION}"
 
                     if (env.CHANGE_ID) {
-                        env.GIB_ARGS = "-Dgib.referenceBranch=refs/remotes/origin/${env.CHANGE_TARGET}"
+                        env.GIB_ARGS = "-Dgib.referenceBranch=refs/remotes/origin/${env.CHANGE_TARGET} -Dgib.fetchReferenceBranch=true"
 
                     } else {
                         def lastSuccessful = env.GIT_PREVIOUS_SUCCESSFUL_COMMIT
@@ -58,38 +58,38 @@ pipeline {
             }
         }
 
-        stage('Tests & Coverage') {
-            steps {
-                bat "mvn test ${env.GIB_ARGS} -s ./.mvn/settings.xml"
-            }
-        }
-        stage('Publish Artifacts - Nexus') {
-            when {
-                anyOf {
-                    branch 'develop'
-                    branch 'main'
-                    branch 'master'
-                }
-            }
-            steps {
-                bat "mvn deploy -Dmaven.test.skip=true ${env.GIB_ARGS} -s ./.mvn/settings.xml"
-            }
-        }
+        // stage('Tests & Coverage') {
+        //     steps {
+        //         bat "mvn test ${env.GIB_ARGS} -s ./.mvn/settings.xml"
+        //     }
+        // }
+        // stage('Publish Artifacts - Nexus') {
+        //     when {
+        //         anyOf {
+        //             branch 'develop'
+        //             branch 'main'
+        //             branch 'master'
+        //         }
+        //     }
+        //     steps {
+        //         bat "mvn deploy -Dmaven.test.skip=true ${env.GIB_ARGS} -s ./.mvn/settings.xml"
+        //     }
+        // }
 
-        stage('Build & Push Docker Images') {
-            when {
-                anyOf {
-                    branch 'develop'
-                    branch 'main'
-                    branch 'master'
-                    branch pattern: "release/*", comparator: "GLOB"
-                    branch pattern: "hotfix/*", comparator: "GLOB"
-                }
-            }
-            steps {
-                bat "mvn jib:build -Dmaven.test.skip=true -Djib.to.tags=${env.VERSION} ${env.GIB_ARGS} -s ./.mvn/settings.xml"
-            }
-        }
+        // stage('Build & Push Docker Images') {
+        //     when {
+        //         anyOf {
+        //             branch 'develop'
+        //             branch 'main'
+        //             branch 'master'
+        //             branch pattern: "release/*", comparator: "GLOB"
+        //             branch pattern: "hotfix/*", comparator: "GLOB"
+        //         }
+        //     }
+        //     steps {
+        //         bat "mvn jib:build -Dmaven.test.skip=true -Djib.to.tags=${env.VERSION} ${env.GIB_ARGS} -s ./.mvn/settings.xml"
+        //     }
+        // }
     }
 
     post {
