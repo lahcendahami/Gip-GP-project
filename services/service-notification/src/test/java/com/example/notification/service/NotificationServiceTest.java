@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-// add some logic here
+// add some logic here in notifation svc
 @ExtendWith(MockitoExtension.class)
 public class NotificationServiceTest {
 
