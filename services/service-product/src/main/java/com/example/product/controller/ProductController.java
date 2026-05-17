@@ -43,8 +43,8 @@ public class ProductController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<Product>> update(@PathVariable Long id,
-                                                        @Valid @RequestBody ProductRequest request) {
-        return ResponseEntity.ok(ApiResponse.ok("Product updated", productService.update(id, request)));
+            @Valid @RequestBody ProductRequest request) {
+        return ResponseEntity.ok(ApiResponse.ok("Product is updated", productService.update(id, request)));
     }
 
     @DeleteMapping("/{id}")
