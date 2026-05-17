@@ -33,12 +33,12 @@ public class UserController {
     public ResponseEntity<ApiResponse<User>> create(@Valid @RequestBody UserRequest request) {
         User created = userService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.ok("User created successfully", created));
+                .body(ApiResponse.ok("User created successfully good ", created));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<User>> update(@PathVariable Long id,
-                                                     @Valid @RequestBody UserRequest request) {
+            @Valid @RequestBody UserRequest request) {
         return ResponseEntity.ok(ApiResponse.ok("User updated", userService.update(id, request)));
     }
 

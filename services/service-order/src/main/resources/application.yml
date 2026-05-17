@@ -8,7 +8,7 @@ spring:
     url: jdbc:h2:mem:orderdb;DB_CLOSE_DELAY=
     driver-class-name: org.h2.Driver
     username: sa
-    password:
+    password: salah
   h2:
     console:
       enabled: true
