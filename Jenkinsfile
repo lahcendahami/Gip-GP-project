@@ -110,11 +110,17 @@ pipeline {
             }
         }
 
-        // stage('Tests & Coverage') {
-        //     steps {
-        //         bat "mvn test ${env.GIB_ARGS} -s ./.mvn/settings.xml"
-        //     }
-        // }
+        stage('Tests & Coverage') {
+            steps {
+                bat "mvn test ${env.GIB_ARGS} -s ./.mvn/settings.xml"
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                bat "mvn sonar:sonar ${env.GIB_ARGS} -s ./.mvn/settings.xml -Dsonar.login=${SONAR_TOKEN}"
+            }
+        }
 
         // stage('Publish Artifacts - Nexus') {
         //     when {

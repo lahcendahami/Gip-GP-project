@@ -18,6 +18,8 @@
         <spring-boot.version>3.3.0</spring-boot.version>
         <jacoco.version>0.8.12</jacoco.version>
         <jib.version>3.4.4</jib.version>
+        <sonar.version>4.0.0.4121</sonar.version>
+        <sonar.host.url>http://localhost:9000</sonar.host.url>
         <jib.skip>true</jib.skip>
         <docker.registry>localhost:8082</docker.registry>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -159,6 +161,11 @@
 
                         <skip>${jib.skip}</skip>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonarsource.scanner.maven</groupId>
+                    <artifactId>sonar-maven-plugin</artifactId>
+                    <version>${sonar.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
