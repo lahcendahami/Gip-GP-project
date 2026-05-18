@@ -115,10 +115,9 @@ pipeline {
                 bat "mvn test ${env.GIB_ARGS} -s ./.mvn/settings.xml"
             }
         }
-
-        stage('SonarQube Analysis') {
+        stage( "SonarQube Analysis") {
             steps {
-                bat "mvn sonar:sonar ${env.GIB_ARGS} -s ./.mvn/settings.xml -Dsonar.login=${SONAR_TOKEN}"
+                bat "mvn sonar:sonar -Dsonar.projectKey=Gp-maven-project -Dsonar.host.url=http://localhost:9000 -Dsonar.token=${SONAR_TOKEN}"
             }
         }
 
